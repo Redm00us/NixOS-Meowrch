@@ -19,6 +19,12 @@
     nixpkgs-unstable = {                          # Нестабильная ветка Nixpkgs (для свежих пакетов)
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
+    
+    # ────────────── Hyprland и компоненты ──────────────
+    hyprland = {                                  # Hyprland (тайловый оконный менеджер для Wayland)
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
 
     # ────────────── Менеджер домашней директории ──────────────
     home-manager = {                              # Home Manager (управление пользовательской конфигурацией)
@@ -63,6 +69,7 @@
     , spicetify-nix
     , catppuccin-nix
     , zed
+    , hyprland
     , ...
   }@inputs:
   let
@@ -85,7 +92,7 @@
       inherit system;
       specialArgs = {
         # Передача переменных и пакетов в модули
-        inherit inputs pkgs pkgs-unstable yandex-music spicetify-nix catppuccin-nix zed;
+        inherit inputs pkgs pkgs-unstable yandex-music spicetify-nix catppuccin-nix zed hyprland;
         zed-editor-pkg = zed.packages.${system}.default or pkgs-unstable.zed-editor; # Пакет редактора Zed
       };
       modules = [
@@ -99,11 +106,12 @@
           home-manager.useUserPackages = true;              # Использовать пользовательские пакеты
           nixpkgs.config.allowUnfree = true;                # Разрешить проприетарные пакеты
 
-          home-manager.extraSpecialArgs = { inherit inputs; }; # Передача inputs в Home Manager
+          home-manager.extraSpecialArgs = { inherit inputs hyprland; }; # Передача inputs в Home Manager
 
           home-manager.users.redm00us = {
             imports = [
               inputs.spicetify-nix.homeManagerModules.default  # Модуль Spicetify для Home Manager
+              inputs.hyprland.homeManagerModules.default      # Модуль Hyprland для Home Manager
               ./home.nix                                      # Пользовательская конфигурация
             ];
           };

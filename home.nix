@@ -23,6 +23,16 @@
     # Overlay для Catppuccin тем
     inputs.catppuccin-nix.overlays.default
   ];
+  
+  # Импортируем модуль Meowrch Hyprland для Home Manager
+  imports = [
+    ./modules/meowrch-hyprland/home.nix
+  ];
+  
+  # Включаем Meowrch Hyprland
+  modules.meowrch-hyprland = {
+    enable = true;
+  };
 
   # ╔════════════════════════════════════════════════════════════════════════════╗
   # ║                           Пользовательские пакеты                        ║
@@ -42,18 +52,27 @@
     enable = true;
 
     # --- Алиасы ---
-    shellAliases = {
-      # Быстрая пересборка системы
-      b = "sudo NIXPKGS_ALLOW_UNFREE=1 nixos-rebuild switch --flake /etc/nixos#nixos --impure";
-      # Открыть конфиг NixOS в VSCode от root
-      c = "code --user-data-dir=\"$HOME/.vscode-root\" /etc/nixos/configuration.nix";
-      # Обновить флейк и пересобрать систему
-      u = "cd /etc/nixos/ & nix flake update && sudo NIXPKGS_ALLOW_UNFREE=1 nixos-rebuild switch --flake /etc/nixos#nixos --impure";
-      # Быстрый вывод информации о системе
-      f = "fastfetch";
-      # Очистка мусора Nix
-      dell = "sudo nix-collect-garbage -d";
-    };
+      shellAliases = {
+        # Быстрая пересборка системы
+        b = "sudo NIXPKGS_ALLOW_UNFREE=1 nixos-rebuild switch --flake /etc/nixos#nixos --impure";
+        # Открыть конфиг NixOS в VSCode от root
+        c = "code --user-data-dir=\"$HOME/.vscode-root\" /etc/nixos/configuration.nix";
+        # Обновить флейк и пересобрать систему
+        u = "cd /etc/nixos/ & nix flake update && sudo NIXPKGS_ALLOW_UNFREE=1 nixos-rebuild switch --flake /etc/nixos#nixos --impure";
+        # Быстрый вывод информации о системе
+        f = "fastfetch";
+        # Очистка мусора Nix
+        dell = "sudo nix-collect-garbage -d";
+      
+        # --- Алиасы для Port Proton ---
+        pp = "portproton";                   # Запуск Port Proton
+        pprun = "portproton --run";          # Запуск игры через Port Proton
+        ppopt = "sudo portproton-optimize";  # Оптимизация системы для игр
+        ppdesk = "portproton-desktop-gen";   # Создание ярлыков для игр
+        
+        # --- Алиасы для Hyprland ---
+        resetxdg = "bash ~/.config/hypr/resetxdgportal.sh";  # Перезапуск XDG порталов
+      };
 
     # --- Пользовательские функции ---
     functions = {
@@ -126,6 +145,14 @@
   # ╔════════════════════════════════════════════════════════════════════════════╗
   # ║                              Dotfiles                                    ║
   # ╚════════════════════════════════════════════════════════════════════════════╝
-  # Пример: подключение конфига Hyprland
-  # home.file.".config/hypr/hyprland.conf".source = ./hyprland.conf;
+  # Конфигурационные файлы Hyprland
+  home.file = {
+    # Скрипт для перезапуска XDG порталов
+    ".config/hypr/resetxdgportal.sh" = {
+      source = ./bin/resetxdgportal.sh;
+      executable = true;
+    };
+    
+    # Скрипт для перезапуска XDG порталов теперь в модуле meowrch-hyprland
+  };
 }

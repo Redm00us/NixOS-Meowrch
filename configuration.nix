@@ -14,6 +14,8 @@
     ./hardware-configuration.nix   # Аппаратная конфигурация
     ./modules/group.nix            # Группы пользователей
     ./modules/packages.nix         # Пользовательские пакеты
+    ./modules/portproton.nix       # Port Proton для игр
+    ./modules/meowrch-hyprland.nix # Hyprland Meowrch конфигурация
   ];
 
   # ╔════════════════════════════════════════════════════════════════════════╗
@@ -40,6 +42,29 @@
   networking.networkmanager.enable = true;               # NetworkManager для управления сетью
   hardware.enableRedistributableFirmware = true;         # Прошивки для оборудования
 
+  # ╔════════════════════════════════════════════════════════════════════════╗
+  # ║                           PORT PROTON                                ║
+  # ╚════════════════════════════════════════════════════════════════════════╝
+  programs.portproton = {
+    enable = true;                      # Включаем Port Proton
+    autoInstall = true;                 # Автоматическая установка
+    systemWide = false;                 # Только для текущего пользователя
+    
+    # Оптимизации производительности
+    optimizations = {
+      enable = true;                    # Включаем оптимизации
+      managedConfig = true;             # Управляемые конфигурации
+      systemTweaks = true;              # Системные оптимизации
+    };
+    
+    # Интеграция с окружением рабочего стола
+    desktop = {
+      enable = true;                    # Включаем интеграцию с DE
+      mimeHandler = true;               # Обработчик .exe файлов
+      autoCreateDesktopFiles = true;    # Автоматическое создание ярлыков
+    };
+  };
+  
   # ╔════════════════════════════════════════════════════════════════════════╗
   # ║                      ЛОКАЛИЗАЦИЯ И ВРЕМЯ                             ║
   # ╚════════════════════════════════════════════════════════════════════════╝
@@ -83,6 +108,7 @@
   programs.hyprland = {
     enable = true;                                       # Включить Hyprland (Wayland WM)
     xwayland.enable = true;                              # Поддержка XWayland
+    package = hyprland.packages.${pkgs.system}.hyprland; # Использовать Hyprland из flake
   };
   hardware.graphics.enable = true;                       # Включить графику
 
@@ -112,9 +138,9 @@
       "org.freedesktop.impl.portal.FileChooser" = { default = [ "gtk" ]; };
       "org.freedesktop.impl.portal.Screenshot" = { default = [ "hyprland" ]; };
     };
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland   # Портал для Hyprland
-      xdg-desktop-portal-gtk        # Портал для GTK-приложений
+    extraPortals = [
+      hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland   # Портал для Hyprland из flake
+      pkgs.xdg-desktop-portal-gtk                                    # Портал для GTK-приложений
     ];
   };
   environment.sessionVariables = {

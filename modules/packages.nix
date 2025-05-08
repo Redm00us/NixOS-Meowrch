@@ -26,12 +26,14 @@
         slurp                      # Выделение области экрана для grim
         swww                       # Динамические обои для Wayland
         rofi-wayland               # Лаунчер приложений для Wayland (меню)
-        waybar                     # Панель статуса для Wayland
+        pkgs-unstable.waybar       # Панель статуса для Wayland (более свежая версия)
         swaylock-effects           # Локскрин с эффектами для Wayland
         dunst                      # Демон уведомлений (notification daemon)
         pamixer                    # Управление громкостью через PulseAudio
         playerctl                  # Управление медиаплеерами через MPRIS
         kdePackages.polkit-kde-agent-1 # Агент polkit для KDE (авторизация)
+        pkgs-unstable.hyprpaper    # Обои для Hyprland
+        pkgs-unstable.hyprpicker   # Пипетка для Hyprland
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                              ВЕБ И СЕТЬ                                  ║
@@ -105,6 +107,7 @@
         libva                      # Аппаратное ускорение видео VA-API
         libvdpau                   # Аппаратное ускорение видео VDPAU
         vulkan-loader              # Загрузчик Vulkan (runtime)
+        pkgs-unstable.libdrm       # Direct Rendering Manager (более свежая версия)
         vulkan-tools               # Инструменты Vulkan (отладка)
         vulkan-validation-layers   # Слои валидации Vulkan (debug)
         amdvlk                     # Vulkan-драйвер AMD (GPU)
