@@ -121,10 +121,6 @@ mkdir -p ~/.cache/meowrch
 ~/.config/hypr/resetxdgportal.sh
 ```
 
-## Лицензия
-
-Проект распространяется под лицензией MIT, подробности в файле LICENSE.
-
 ## Благодарности
 
 Этот модуль основан на конфигурации [Meowrch](https://github.com/DIMFLIX-OFFICIAL/Meowrch) от DIMFLIX.
